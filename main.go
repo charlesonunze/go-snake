@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/veandco/go-sdl2/sdl"
 )
@@ -11,6 +12,7 @@ import (
 const (
 	winTitle   = "Go Snake"
 	boardColor = 0xffCC98
+	snakeColor = 0xAE2D68
 	winWidth,
 	winHeight,
 	maxWidth,
@@ -50,18 +52,53 @@ func run() error {
 	handleErr("could not get surface:", err)
 
 	// Init game board
-	newBoard(surface, boardWidth, boardHeight)
-
-	window.UpdateSurface()
+	board := newBoard(surface, boardWidth, boardHeight)
+	var startingPosX, startingPosY int32
+	s := newSnake(board, surface, startingPosX, startingPosY)
+	s.paintBody(board, surface)
 
 	running := true
 	for running {
 		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
-			switch event.(type) {
+			switch t := event.(type) {
 			case *sdl.QuitEvent:
 				running = false
+
+			case *sdl.KeyboardEvent:
+				if t.Type == sdl.KEYDOWN && t.State == sdl.PRESSED {
+					switch t.Keysym.Sym {
+					case sdl.K_UP:
+						if s.direction == "down" {
+							return fmt.Errorf("cc")
+						}
+						s.direction = "up"
+
+					case sdl.K_DOWN:
+						if s.direction == "up" {
+							return fmt.Errorf("cc")
+						}
+						s.direction = "down"
+
+					case sdl.K_LEFT:
+						if s.direction == "right" {
+							return fmt.Errorf("cc")
+						}
+						s.direction = "left"
+
+					case sdl.K_RIGHT:
+						if s.direction == "left" {
+							return fmt.Errorf("cc")
+						}
+						s.direction = "right"
+
+					}
+				}
 			}
 		}
+
+		time.Sleep(time.Duration(s.speed) * time.Millisecond)
+		s.move(board, surface)
+		window.UpdateSurface()
 	}
 
 	return nil

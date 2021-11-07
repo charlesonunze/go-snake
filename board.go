@@ -2,7 +2,7 @@ package main
 
 import "github.com/veandco/go-sdl2/sdl"
 
-func newBoard(surface *sdl.Surface, boardWidth, boardHeight int32) [][]sdl.Rect {
+func newBoard(surface *sdl.Surface, boardWidth, boardHeight int32) [][]*sdl.Rect {
 	middlePositionX := int32((winWidth - boardWidth) / 2)
 	middlePositionY := int32((winHeight - boardHeight) / 2)
 
@@ -11,7 +11,7 @@ func newBoard(surface *sdl.Surface, boardWidth, boardHeight int32) [][]sdl.Rect 
 	xCells := int(boardWidth / cellWidth)
 	yCells := int(boardHeight / cellHeight)
 
-	board := make([][]sdl.Rect, yCells)
+	board := make([][]*sdl.Rect, yCells)
 
 	for i := range board {
 		for j := 0; j < xCells; j++ {
@@ -24,7 +24,7 @@ func newBoard(surface *sdl.Surface, boardWidth, boardHeight int32) [][]sdl.Rect 
 
 			surface.FillRect(rect, boardColor)
 
-			board[i] = append(board[i], *rect)
+			board[i] = append(board[i], rect)
 			posX += cellWidth
 		}
 
