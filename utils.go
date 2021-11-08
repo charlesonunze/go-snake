@@ -1,6 +1,11 @@
 package main
 
-import "github.com/veandco/go-sdl2/sdl"
+import (
+	"math/rand"
+	"time"
+
+	"github.com/veandco/go-sdl2/sdl"
+)
 
 func paintCell(board [][]*sdl.Rect, surface *sdl.Surface, color uint32, posX, posY int32) {
 	rect := &sdl.Rect{
@@ -17,4 +22,14 @@ func getCellsCount() (int, int) {
 	yCellCount := int(boardHeight / cellHeight)
 
 	return xCellCount, yCellCount
+}
+
+func getStartingPosition() (int32, int32) {
+	rand.Seed(time.Now().UTC().UnixNano())
+	xCellCount, yCellCount := getCellsCount()
+
+	x := int32(rand.Intn(xCellCount))
+	y := int32(rand.Intn(yCellCount))
+
+	return x, y
 }

@@ -56,11 +56,13 @@ func run() error {
 
 	// Init game board
 	board := newBoard(surface)
-	var startingPosX, startingPosY int32
+
+	startingPosX, startingPosY := getStartingPosition()
 	s := newSnake(startingPosX, startingPosY)
 	s.paintBody(board, surface)
 
-	f := newFood(startingPosX, startingPosY+1)
+	startingPosX, startingPosY = getStartingPosition()
+	f := newFood(startingPosX, startingPosY)
 	f.paintBody(board, surface)
 
 	running := true
