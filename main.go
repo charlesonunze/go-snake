@@ -60,6 +60,9 @@ func run() error {
 	s := newSnake(startingPosX, startingPosY)
 	s.paintBody(board, surface)
 
+	f := newFood(startingPosX, startingPosY+1)
+	f.paintBody(board, surface)
+
 	running := true
 	for running {
 		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
