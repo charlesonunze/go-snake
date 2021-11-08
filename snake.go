@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/veandco/go-sdl2/sdl"
 )
 
@@ -59,11 +57,11 @@ func (s *snake) move(board [][]*sdl.Rect, surface *sdl.Surface) {
 	case "right":
 		s.moveRight(board, surface)
 	case "down":
-		fmt.Println("not implemented")
+		s.moveDown(board, surface)
 	case "left":
-		fmt.Println("not implemented")
+		s.moveLeft(board, surface)
 	case "up":
-		fmt.Println("not implemented")
+		s.moveUp(board, surface)
 	}
 }
 
@@ -74,6 +72,60 @@ func (s *snake) moveRight(board [][]*sdl.Rect, surface *sdl.Surface) {
 	head := []*cell{
 		{
 			x: s.body[0].x + 1,
+			y: s.body[0].y,
+		},
+	}
+
+	s.body = append(head, s.body...)
+	s.body = s.body[:len(s.body)-1]
+
+	s.paintBody(board, surface)
+	paintCell(board, surface, boardColor, tailPosX, tailPosY)
+}
+
+func (s *snake) moveDown(board [][]*sdl.Rect, surface *sdl.Surface) {
+	tailPosX := s.body[len(s.body)-1].x
+	tailPosY := s.body[len(s.body)-1].y
+
+	head := []*cell{
+		{
+			x: s.body[0].x,
+			y: s.body[0].y + 1,
+		},
+	}
+
+	s.body = append(head, s.body...)
+	s.body = s.body[:len(s.body)-1]
+
+	s.paintBody(board, surface)
+	paintCell(board, surface, boardColor, tailPosX, tailPosY)
+}
+
+func (s *snake) moveUp(board [][]*sdl.Rect, surface *sdl.Surface) {
+	tailPosX := s.body[len(s.body)-1].x
+	tailPosY := s.body[len(s.body)-1].y
+
+	head := []*cell{
+		{
+			x: s.body[0].x,
+			y: s.body[0].y - 1,
+		},
+	}
+
+	s.body = append(head, s.body...)
+	s.body = s.body[:len(s.body)-1]
+
+	s.paintBody(board, surface)
+	paintCell(board, surface, boardColor, tailPosX, tailPosY)
+}
+
+func (s *snake) moveLeft(board [][]*sdl.Rect, surface *sdl.Surface) {
+	tailPosX := s.body[len(s.body)-1].x
+	tailPosY := s.body[len(s.body)-1].y
+
+	head := []*cell{
+		{
+			x: s.body[0].x - 1,
 			y: s.body[0].y,
 		},
 	}

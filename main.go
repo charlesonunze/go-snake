@@ -96,7 +96,7 @@ func run() error {
 			}
 		}
 
-		time.Sleep(time.Duration(s.speed) * time.Millisecond)
+		time.Sleep(100 * time.Millisecond)
 		s.move(board, surface)
 		window.UpdateSurface()
 	}
