@@ -36,6 +36,17 @@ func (s *snake) paintBody(board [][]*sdl.Rect, surface *sdl.Surface) error {
 	return nil
 }
 
+func (s *snake) eatFood(board [][]*sdl.Rect, surface *sdl.Surface, food *food) {
+	tailPosX := s.body[len(s.body)-1].x
+	tailPosY := s.body[len(s.body)-1].y
+	tail := &cell{
+		x: tailPosX,
+		y: tailPosY,
+	}
+	s.body = append(s.body, tail)
+	food.respawn(board, surface)
+}
+
 func (s *snake) move(board [][]*sdl.Rect, surface *sdl.Surface) {
 	switch s.direction {
 	case "right":

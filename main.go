@@ -108,7 +108,7 @@ func run() error {
 		s.move(board, surface)
 
 		if s.body[0].x == f.x && s.body[0].y == f.y {
-			f.respawn(board, surface)
+			s.eatFood(board, surface, &f)
 		}
 
 		window.UpdateSurface()
