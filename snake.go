@@ -11,20 +11,14 @@ type cell struct {
 
 type snake struct {
 	speed     float32
-	width     int32
-	height    int32
 	direction string
 	body      []*cell
-	board     [][]sdl.Rect
-	surface   *sdl.Surface
 }
 
-func newSnake(board [][]*sdl.Rect, surface *sdl.Surface, startingPosX, startingPosY int32) *snake {
+func newSnake(startingPosX, startingPosY int32) *snake {
 	return &snake{
 		speed:     1000,
 		direction: "right",
-		width:     cellWidth,
-		height:    cellHeight,
 		body: []*cell{
 			{
 				x: startingPosX,
@@ -40,16 +34,6 @@ func (s *snake) paintBody(board [][]*sdl.Rect, surface *sdl.Surface) error {
 	}
 
 	return nil
-}
-
-func paintCell(board [][]*sdl.Rect, surface *sdl.Surface, color uint32, posX, posY int32) {
-	rect := &sdl.Rect{
-		X: board[posY][posX].X,
-		Y: board[posY][posX].Y,
-		W: cellWidth,
-		H: cellHeight,
-	}
-	surface.FillRect(rect, color)
 }
 
 func (s *snake) move(board [][]*sdl.Rect, surface *sdl.Surface) {

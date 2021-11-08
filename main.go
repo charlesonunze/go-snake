@@ -10,15 +10,18 @@ import (
 )
 
 const (
-	winTitle   = "Go Snake"
-	boardColor = 0xffCC98
-	snakeColor = 0xAE2D68
-	winWidth,
-	winHeight,
-	maxWidth,
-	maxHeight,
-	cellWidth,
-	cellHeight int32 = 1400, 800, 1080, 600, 20, 20
+	winTitle          = "Go Snake"
+	boardColor        = 0xffCC98
+	snakeColor        = 0xAE2D68
+	foodColor         = 0x4B4B4B
+	winWidth    int32 = 1400
+	winHeight   int32 = 800
+	maxWidth    int32 = 1080
+	maxHeight   int32 = 600
+	boardWidth  int32 = 1080
+	boardHeight int32 = 600
+	cellWidth   int32 = 20
+	cellHeight  int32 = 20
 )
 
 func run() error {
@@ -52,9 +55,9 @@ func run() error {
 	handleErr("could not get surface:", err)
 
 	// Init game board
-	board := newBoard(surface, boardWidth, boardHeight)
+	board := newBoard(surface)
 	var startingPosX, startingPosY int32
-	s := newSnake(board, surface, startingPosX, startingPosY)
+	s := newSnake(startingPosX, startingPosY)
 	s.paintBody(board, surface)
 
 	running := true
