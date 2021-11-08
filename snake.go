@@ -44,7 +44,7 @@ func (s *snake) eatFood(board [][]*sdl.Rect, surface *sdl.Surface, food *food) {
 		y: tailPosY,
 	}
 	s.body = append(s.body, tail)
-	food.respawn(board, surface)
+	food.respawn(board, surface, s)
 }
 
 func (s *snake) move(board [][]*sdl.Rect, surface *sdl.Surface) {

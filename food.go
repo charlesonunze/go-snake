@@ -24,7 +24,7 @@ func (f *food) paintBody(board [][]*sdl.Rect, surface *sdl.Surface) error {
 	return nil
 }
 
-func (f *food) respawn(board [][]*sdl.Rect, surface *sdl.Surface) {
+func (f *food) respawn(board [][]*sdl.Rect, surface *sdl.Surface, snake *snake) {
 	foodPosX := f.x
 	foodPosY := f.y
 	paintCell(board, surface, boardColor, foodPosX, foodPosY)
@@ -33,5 +33,13 @@ func (f *food) respawn(board [][]*sdl.Rect, surface *sdl.Surface) {
 
 	f.x = int32(rand.Intn(xCellCount))
 	f.y = int32(rand.Intn(yCellCount))
+
+	for _, cell := range snake.body {
+		if f.x == cell.x && f.y == cell.y {
+			f.x = int32(rand.Intn(xCellCount))
+			f.y = int32(rand.Intn(yCellCount))
+		}
+	}
+
 	paintCell(board, surface, foodColor, f.x, f.y)
 }
