@@ -104,7 +104,11 @@ func run() error {
 
 		time.Sleep(100 * time.Millisecond)
 		s.move(board, surface)
-		f.respawn(board, surface)
+
+		if s.body[0].x == f.x && s.body[0].y == f.y {
+			f.respawn(board, surface)
+		}
+
 		window.UpdateSurface()
 	}
 
