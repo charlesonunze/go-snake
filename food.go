@@ -23,3 +23,15 @@ func (f *food) paintBody(board [][]*sdl.Rect, surface *sdl.Surface) error {
 
 	return nil
 }
+
+func (f *food) respawn(board [][]*sdl.Rect, surface *sdl.Surface) {
+	foodPosX := f.x
+	foodPosY := f.y
+	paintCell(board, surface, boardColor, foodPosX, foodPosY)
+
+	xCellCount, yCellCount := getCellsCount()
+
+	f.x = int32(rand.Intn(xCellCount))
+	f.y = int32(rand.Intn(yCellCount))
+	paintCell(board, surface, foodColor, f.x, f.y)
+}

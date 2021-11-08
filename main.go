@@ -104,6 +104,7 @@ func run() error {
 
 		time.Sleep(100 * time.Millisecond)
 		s.move(board, surface)
+		f.respawn(board, surface)
 		window.UpdateSurface()
 	}
 
