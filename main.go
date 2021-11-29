@@ -6,27 +6,24 @@ import (
 	"os"
 	"time"
 
+	"github.com/charlesonunze/go-snake/board"
+	"github.com/charlesonunze/go-snake/food"
+	"github.com/charlesonunze/go-snake/snake"
+	"github.com/charlesonunze/go-snake/utils"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
 const (
-	winTitle          = "Go Snake"
-	boardColor        = 0xffCC98
-	snakeColor        = 0xAE2D68
-	foodColor         = 0x4B4B4B
-	winWidth    int32 = 1400
-	winHeight   int32 = 800
-	maxWidth    int32 = 1080
-	maxHeight   int32 = 600
-	boardWidth  int32 = 1080
-	boardHeight int32 = 600
-	cellWidth   int32 = 20
-	cellHeight  int32 = 20
+	winTitle        = "Go Snake"
+	winWidth  int32 = 1400
+	winHeight int32 = 800
+	// @TODO handle max w and h
+	maxWidth  int32 = 1080
+	maxHeight int32 = 600
 )
 
 func run() error {
 	var w, h int
-
 	flag.IntVar(&w, "w", 1080, "width of the game board")
 	flag.IntVar(&h, "h", 600, "height of the game board")
 	flag.Parse()
@@ -55,15 +52,15 @@ func run() error {
 	handleErr("could not get surface:", err)
 
 	// Init game board
-	board := newBoard(surface)
+	board := board.New(surface, boardWidth, boardHeight, winWidth, winHeight)
 
-	startingPosX, startingPosY := getStartingPosition()
-	s := newSnake(startingPosX, startingPosY)
-	s.paintBody(board, surface)
+	startingPosX, startingPosY := utils.GetStartingPosition(*board)
+	s := snake.New(surface, startingPosX, startingPosY)
+	s.Draw(board)
 
-	startingPosX, startingPosY = getStartingPosition()
-	f := newFood(startingPosX, startingPosY)
-	f.paintBody(board, surface)
+	startingPosX, startingPosY = utils.GetStartingPosition(*board)
+	f := food.New(surface, startingPosX, startingPosY)
+	f.Draw(board)
 
 	running := true
 	for running {
@@ -74,42 +71,15 @@ func run() error {
 
 			case *sdl.KeyboardEvent:
 				if t.Type == sdl.KEYDOWN && t.State == sdl.PRESSED {
-					switch t.Keysym.Sym {
-					case sdl.K_UP:
-						if s.direction == "down" {
-							return fmt.Errorf("cc")
-						}
-						s.direction = "up"
-
-					case sdl.K_DOWN:
-						if s.direction == "up" {
-							return fmt.Errorf("cc")
-						}
-						s.direction = "down"
-
-					case sdl.K_LEFT:
-						if s.direction == "right" {
-							return fmt.Errorf("cc")
-						}
-						s.direction = "left"
-
-					case sdl.K_RIGHT:
-						if s.direction == "left" {
-							return fmt.Errorf("cc")
-						}
-						s.direction = "right"
-
-					}
+					s.HandleDirection(t.Keysym.Sym)
 				}
 			}
 		}
 
 		time.Sleep(100 * time.Millisecond)
-		s.move(board, surface)
 
-		if s.body[0].x == f.x && s.body[0].y == f.y {
-			s.eatFood(board, surface, &f)
-		}
+		s.Move(board)
+		s.EatFood(board, f)
 
 		window.UpdateSurface()
 	}
