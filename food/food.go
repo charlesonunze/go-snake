@@ -32,28 +32,37 @@ func New(surface *sdl.Surface, startingPosX, startingPosY int32) *Food {
 
 // Draw handles the painting of the food on the board canvas
 func (f *Food) Draw(b *board.Board) {
+	key := utils.GetPositionKey(f.X, f.Y)
+	b.OccupiedSquares[key] = common.Cell{
+		X: f.X,
+		Y: f.Y,
+	}
 	utils.PaintCell(b, f.color, f.X, f.Y)
 }
 
 // Respawn handles the regeneration of the food when it's been consumed by a snake
-func (f *Food) Respawn(b *board.Board, snakeBody []*common.Cell) {
-	foodPosX := f.X
-	foodPosY := f.Y
-	utils.PaintCell(b, b.Color, foodPosX, foodPosY)
+func (f *Food) Respawn(b *board.Board) {
+	key := utils.GetPositionKey(f.X, f.Y)
 
+	// free up space
+	delete(b.OccupiedSquares, key)
+	utils.PaintCell(b, b.Color, f.X, f.Y)
+
+	// get new random position
 	xCellCount, yCellCount := utils.GetCellsCount(*b)
-
 	f.X = int32(rand.Intn(xCellCount))
 	f.Y = int32(rand.Intn(yCellCount))
 
-	for _, cell := range snakeBody {
-		if f.X == cell.X && f.Y == cell.Y {
-			// what happens if it repspawns again on the snake body you ask?
-			// well, stop asking and mind your business
-			f.X = int32(rand.Intn(xCellCount))
-			f.Y = int32(rand.Intn(yCellCount))
-		}
+	// if the generated position exists in an occupied square, recurse
+	key = utils.GetPositionKey(f.X, f.Y)
+	_, ok := b.OccupiedSquares[key]
+	if ok {
+		f.Respawn(b)
 	}
 
+	b.OccupiedSquares[key] = common.Cell{
+		X: f.X,
+		Y: f.Y,
+	}
 	utils.PaintCell(b, f.color, f.X, f.Y)
 }

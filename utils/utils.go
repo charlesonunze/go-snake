@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"math/rand"
 	"time"
 
@@ -37,4 +38,8 @@ func GetStartingPosition(b board.Board) (int32, int32) {
 	y := int32(rand.Intn(yCellCount))
 
 	return x, y
+}
+
+func GetPositionKey(posX, posY int32) string {
+	return fmt.Sprintf("%d,%d", posX, posY)
 }

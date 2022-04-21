@@ -1,18 +1,20 @@
 package board
 
 import (
+	"github.com/charlesonunze/go-snake/common"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
 // Board defines the properties of a board
 type Board struct {
-	Width      int32
-	Height     int32
-	CellWidth  int32
-	CellHeight int32
-	Color      uint32
-	Canvas     [][]*sdl.Rect
-	Surface    *sdl.Surface
+	Width           int32
+	Height          int32
+	CellWidth       int32
+	CellHeight      int32
+	Color           uint32
+	Canvas          [][]*sdl.Rect
+	Surface         *sdl.Surface
+	OccupiedSquares map[string]common.Cell
 }
 
 // New creates a pointer to the board struct
@@ -54,12 +56,13 @@ func New(surface *sdl.Surface, boardWidth, boardHeight, winWidth, winHeight int3
 	}
 
 	return &Board{
-		Width:      boardWidth,
-		Height:     boardHeight,
-		CellWidth:  cellWidth,
-		CellHeight: cellHeight,
-		Color:      boardColor,
-		Canvas:     boardCanvas,
-		Surface:    surface,
+		Width:           boardWidth,
+		Height:          boardHeight,
+		CellWidth:       cellWidth,
+		CellHeight:      cellHeight,
+		Color:           boardColor,
+		Canvas:          boardCanvas,
+		Surface:         surface,
+		OccupiedSquares: map[string]common.Cell{},
 	}
 }

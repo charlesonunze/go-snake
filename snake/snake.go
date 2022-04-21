@@ -38,6 +38,11 @@ func New(surface *sdl.Surface, startingPosX, startingPosY int32) *Snake {
 // Draw handles the painting of the snake on the board canvas
 func (s *Snake) Draw(b *board.Board) {
 	for _, cell := range s.body {
+		key := utils.GetPositionKey(cell.X, cell.Y)
+		b.OccupiedSquares[key] = common.Cell{
+			X: cell.X,
+			Y: cell.Y,
+		}
 		utils.PaintCell(b, s.color, cell.X, cell.Y)
 	}
 }
@@ -52,7 +57,7 @@ func (s *Snake) EatFood(b *board.Board, f *food.Food) {
 			Y: tailPosY,
 		}
 		s.body = append(s.body, tail)
-		f.Respawn(b, s.body)
+		f.Respawn(b)
 	}
 }
 
@@ -116,6 +121,9 @@ func (s *Snake) moveRight(b *board.Board) {
 	s.body = s.body[:len(s.body)-1]
 
 	s.Draw(b)
+
+	key := utils.GetPositionKey(tailPosX, tailPosY)
+	delete(b.OccupiedSquares, key)
 	utils.PaintCell(b, b.Color, tailPosX, tailPosY)
 }
 
@@ -134,6 +142,9 @@ func (s *Snake) moveDown(b *board.Board) {
 	s.body = s.body[:len(s.body)-1]
 
 	s.Draw(b)
+
+	key := utils.GetPositionKey(tailPosX, tailPosY)
+	delete(b.OccupiedSquares, key)
 	utils.PaintCell(b, b.Color, tailPosX, tailPosY)
 }
 
@@ -152,6 +163,9 @@ func (s *Snake) moveUp(b *board.Board) {
 	s.body = s.body[:len(s.body)-1]
 
 	s.Draw(b)
+
+	key := utils.GetPositionKey(tailPosX, tailPosY)
+	delete(b.OccupiedSquares, key)
 	utils.PaintCell(b, b.Color, tailPosX, tailPosY)
 }
 
@@ -170,5 +184,8 @@ func (s *Snake) moveLeft(b *board.Board) {
 	s.body = s.body[:len(s.body)-1]
 
 	s.Draw(b)
+
+	key := utils.GetPositionKey(tailPosX, tailPosY)
+	delete(b.OccupiedSquares, key)
 	utils.PaintCell(b, b.Color, tailPosX, tailPosY)
 }
