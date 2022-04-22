@@ -1,6 +1,6 @@
 package sprite
 
-import "github.com/charlesonunze/go-snake/board"
+import "github.com/charlesonunze/go-snake/pkg/board"
 
 type Sprite interface {
 	DetectCollision(b *board.Board)
