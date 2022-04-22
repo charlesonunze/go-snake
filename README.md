@@ -2,6 +2,10 @@
 
 The snake game
 
+## System Requirements
+
+Follow this [link](https://github.com/veandco/go-sdl2#requirements) to install tools needed to run this application properly.
+
 ## Assumptions
 
 - Only the snake and food exist in the game board
