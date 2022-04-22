@@ -12,20 +12,23 @@ import (
 
 // Snake defines the properties of a snake
 type Snake struct {
-	// speed     float32
-	direction string
-	body      []*common.Cell
-	color     uint32
-	surface   *sdl.Surface
+	direction  string
+	body       []*common.Cell
+	color      uint32
+	surface    *sdl.Surface
+	cellWidth  int32
+	cellHeight int32
+	Round      int32
 }
 
 // New creates a pointer to the snake struct
 func New(surface *sdl.Surface, startingPosX, startingPosY int32) *Snake {
 	return &Snake{
-		// speed:     1000,
-		surface:   surface,
-		color:     0xAE2D68,
-		direction: "right",
+		surface:    surface,
+		color:      0xAE2D68,
+		direction:  "right",
+		cellWidth:  20,
+		cellHeight: 20,
 		body: []*common.Cell{
 			{
 				X: startingPosX,
@@ -104,20 +107,20 @@ func (s *Snake) GetHeadPosition() *common.Cell {
 }
 
 // Move handles the movement of the snake
-func (s *Snake) Move(b *board.Board) {
+func (s *Snake) Move(b *board.Board, r *bool) {
 	switch s.direction {
 	case "right":
-		s.moveRight(b)
+		s.moveRight(b, r)
 	case "down":
-		s.moveDown(b)
+		s.moveDown(b, r)
 	case "left":
-		s.moveLeft(b)
+		s.moveLeft(b, r)
 	case "up":
-		s.moveUp(b)
+		s.moveUp(b, r)
 	}
 }
 
-func (s *Snake) moveRight(b *board.Board) {
+func (s *Snake) moveRight(b *board.Board, r *bool) {
 	tailPosX := s.body[len(s.body)-1].X
 	tailPosY := s.body[len(s.body)-1].Y
 
@@ -131,14 +134,21 @@ func (s *Snake) moveRight(b *board.Board) {
 	s.body = append(head, s.body...)
 	s.body = s.body[:len(s.body)-1]
 
-	s.Draw(b)
+	screenEdge := b.Width / b.CellWidth
+
+	if s.body[0].X+1 <= screenEdge {
+		s.Draw(b)
+		s.Round++
+	} else {
+		*r = false
+	}
 
 	key := utils.GetPositionKey(tailPosX, tailPosY)
 	delete(b.OccupiedSquares, key)
 	utils.PaintCell(b, b.Color, tailPosX, tailPosY)
 }
 
-func (s *Snake) moveDown(b *board.Board) {
+func (s *Snake) moveDown(b *board.Board, r *bool) {
 	tailPosX := s.body[len(s.body)-1].X
 	tailPosY := s.body[len(s.body)-1].Y
 
@@ -152,14 +162,21 @@ func (s *Snake) moveDown(b *board.Board) {
 	s.body = append(head, s.body...)
 	s.body = s.body[:len(s.body)-1]
 
-	s.Draw(b)
+	screenEdge := b.Height / b.CellHeight
+
+	if s.body[0].Y+1 <= screenEdge {
+		s.Draw(b)
+		s.Round++
+	} else {
+		*r = false
+	}
 
 	key := utils.GetPositionKey(tailPosX, tailPosY)
 	delete(b.OccupiedSquares, key)
 	utils.PaintCell(b, b.Color, tailPosX, tailPosY)
 }
 
-func (s *Snake) moveUp(b *board.Board) {
+func (s *Snake) moveUp(b *board.Board, r *bool) {
 	tailPosX := s.body[len(s.body)-1].X
 	tailPosY := s.body[len(s.body)-1].Y
 
@@ -173,14 +190,21 @@ func (s *Snake) moveUp(b *board.Board) {
 	s.body = append(head, s.body...)
 	s.body = s.body[:len(s.body)-1]
 
-	s.Draw(b)
+	screenEdge := int32(-2)
+
+	if s.body[0].Y-1 == screenEdge {
+		*r = false
+	} else {
+		s.Draw(b)
+		s.Round++
+	}
 
 	key := utils.GetPositionKey(tailPosX, tailPosY)
 	delete(b.OccupiedSquares, key)
 	utils.PaintCell(b, b.Color, tailPosX, tailPosY)
 }
 
-func (s *Snake) moveLeft(b *board.Board) {
+func (s *Snake) moveLeft(b *board.Board, r *bool) {
 	tailPosX := s.body[len(s.body)-1].X
 	tailPosY := s.body[len(s.body)-1].Y
 
@@ -194,7 +218,14 @@ func (s *Snake) moveLeft(b *board.Board) {
 	s.body = append(head, s.body...)
 	s.body = s.body[:len(s.body)-1]
 
-	s.Draw(b)
+	screenEdge := int32(-2)
+
+	if s.body[0].X-1 == screenEdge {
+		*r = false
+	} else {
+		s.Draw(b)
+		s.Round++
+	}
 
 	key := utils.GetPositionKey(tailPosX, tailPosY)
 	delete(b.OccupiedSquares, key)

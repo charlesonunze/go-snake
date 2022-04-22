@@ -84,7 +84,7 @@ func run() error {
 		time.Sleep(100 * time.Millisecond)
 		printGameState(*b, *s, running)
 
-		s.Move(b)
+		s.Move(b, &running)
 		s.EatFood(b, f)
 
 		window.UpdateSurface()
@@ -120,4 +120,5 @@ func printGameState(b board.Board, s snake.Snake, gameOver bool) {
 
 	head := s.GetHeadPosition()
 	fmt.Printf("SNAKE HEAD POSITION: %d, %d \n", head.X, head.Y)
+	fmt.Printf("SNAKE HEAD POSITION: %v \n", b.OccupiedSquares)
 }
