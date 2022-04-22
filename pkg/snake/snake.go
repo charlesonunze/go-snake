@@ -3,10 +3,10 @@ package snake
 import (
 	"fmt"
 
-	"github.com/charlesonunze/go-snake/board"
-	"github.com/charlesonunze/go-snake/common"
-	"github.com/charlesonunze/go-snake/food"
-	"github.com/charlesonunze/go-snake/utils"
+	"github.com/charlesonunze/go-snake/pkg/board"
+	"github.com/charlesonunze/go-snake/pkg/common"
+	"github.com/charlesonunze/go-snake/pkg/food"
+	"github.com/charlesonunze/go-snake/pkg/utils"
 	"github.com/veandco/go-sdl2/sdl"
 )
 

@@ -1,7 +1,7 @@
 package board
 
 import (
-	"github.com/charlesonunze/go-snake/common"
+	"github.com/charlesonunze/go-snake/pkg/common"
 	"github.com/veandco/go-sdl2/sdl"
 )
 

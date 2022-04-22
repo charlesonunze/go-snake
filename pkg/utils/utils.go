@@ -5,7 +5,7 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/charlesonunze/go-snake/board"
+	"github.com/charlesonunze/go-snake/pkg/board"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
