@@ -82,13 +82,15 @@ func run() error {
 		}
 
 		time.Sleep(100 * time.Millisecond)
-		printGameState(*b, *s, running)
+		printGameState(*b, *s)
 
 		s.Move(b, &running)
 		s.EatFood(b, f)
 
 		window.UpdateSurface()
 	}
+
+	fmt.Println("GAME OVER!!!!!!!")
 
 	return nil
 }
@@ -107,11 +109,8 @@ func main() {
 	}
 }
 
-func printGameState(b board.Board, s snake.Snake, gameOver bool) {
-	if gameOver {
-		fmt.Println("")
-		fmt.Println("GAME OVER!!!!!!!")
-	}
+func printGameState(b board.Board, s snake.Snake) {
+	fmt.Println("")
 
 	fmt.Printf("SCORE: %d \n", b.Score)
 
