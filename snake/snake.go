@@ -57,6 +57,9 @@ func (s *Snake) EatFood(b *board.Board, f *food.Food) {
 			Y: tailPosY,
 		}
 		s.body = append(s.body, tail)
+
+		b.Score++
+
 		f.Respawn(b)
 	}
 }
@@ -90,6 +93,14 @@ func (s *Snake) HandleDirection(keyCode sdl.Keycode) error {
 	}
 
 	return nil
+}
+
+func (s *Snake) GetSnakeLength() int32 {
+	return int32(len(s.body)) * s.cellWidth
+}
+
+func (s *Snake) GetHeadPosition() *common.Cell {
+	return s.body[0]
 }
 
 // Move handles the movement of the snake

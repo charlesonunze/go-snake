@@ -11,6 +11,7 @@ type Board struct {
 	Height          int32
 	CellWidth       int32
 	CellHeight      int32
+	Score           int32
 	Color           uint32
 	Canvas          [][]*sdl.Rect
 	Surface         *sdl.Surface

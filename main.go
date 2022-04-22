@@ -15,11 +15,13 @@ import (
 
 const (
 	winTitle        = "Go Snake"
-	winWidth  int32 = 1400
+	winWidth  int32 = 1200
 	winHeight int32 = 800
-	// @TODO handle max w and h
-	maxWidth  int32 = 1080
-	maxHeight int32 = 600
+
+	minBoardWidth  int32 = 400
+	maxBoardWidth  int32 = 1200
+	minBoardHeight int32 = 400
+	maxBoardHeight int32 = 1200
 )
 
 func run() error {
@@ -29,7 +31,10 @@ func run() error {
 	flag.Parse()
 
 	boardWidth, boardHeight := int32(w), int32(h)
-	if boardWidth == 0 || boardHeight == 0 {
+	if boardWidth < minBoardWidth ||
+		boardWidth > maxBoardWidth ||
+		boardHeight < minBoardHeight ||
+		boardHeight > maxBoardHeight {
 		flag.PrintDefaults()
 		os.Exit(1)
 	}
@@ -52,15 +57,15 @@ func run() error {
 	handleErr("could not get surface:", err)
 
 	// Init game board
-	board := board.New(surface, boardWidth, boardHeight, winWidth, winHeight)
+	b := board.New(surface, boardWidth, boardHeight, winWidth, winHeight)
 
-	startingPosX, startingPosY := utils.GetStartingPosition(*board)
+	startingPosX, startingPosY := utils.GetStartingPosition(*b)
 	s := snake.New(surface, startingPosX, startingPosY)
-	s.Draw(board)
+	s.Draw(b)
 
-	startingPosX, startingPosY = utils.GetStartingPosition(*board)
+	startingPosX, startingPosY = utils.GetStartingPosition(*b)
 	f := food.New(surface, startingPosX, startingPosY)
-	f.Draw(board)
+	f.Draw(b)
 
 	running := true
 	for running {
@@ -77,9 +82,10 @@ func run() error {
 		}
 
 		time.Sleep(100 * time.Millisecond)
+		printGameState(*b, *s, running)
 
-		s.Move(board)
-		s.EatFood(board, f)
+		s.Move(b)
+		s.EatFood(b, f)
 
 		window.UpdateSurface()
 	}
@@ -99,4 +105,19 @@ func main() {
 		fmt.Fprintf(os.Stderr, "%v", err)
 		os.Exit(2)
 	}
+}
+
+func printGameState(b board.Board, s snake.Snake, gameOver bool) {
+	if gameOver {
+		fmt.Println("")
+		fmt.Println("GAME OVER!!!!!!!")
+	}
+
+	fmt.Printf("SCORE: %d \n", b.Score)
+
+	fmt.Printf("SNAKE LENGTH: %d  \n", s.GetSnakeLength())
+	fmt.Printf("SNAKE ROUND: %d \n", s.Round)
+
+	head := s.GetHeadPosition()
+	fmt.Printf("SNAKE HEAD POSITION: %d, %d \n", head.X, head.Y)
 }
