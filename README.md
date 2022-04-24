@@ -21,3 +21,9 @@ This allows us add more characters to the game, each of them implementing their 
 ## Task duration
 
 Approximately 100hours in actual development.
+
+## Running the application
+
+```go run ./cmd/snake.go -w 1000 -h 800```
+
+where w is the width of the board and h is the height of the board
